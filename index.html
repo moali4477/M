@@ -19,6 +19,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="FullLogo_NoBuffer.png">
+
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {font-family: 'Cairo', sans-serif; background: linear-gradient(135deg,#1e3c72,#2a5298); color: #333;}
@@ -42,8 +45,13 @@
 
     /* الصفحة الرئيسية */
     #main-content {display: none; padding: 20px;}
-    header {text-align: center; color: white; margin-bottom: 40px;}
-    header h1 {font-size: 2rem; margin-bottom: 10px;}
+
+    header {
+      display: flex; align-items: center; justify-content: center; gap: 15px; color: white; margin-bottom: 40px;
+    }
+    header img {height: 60px;}
+    header div h1 {margin: 0;}
+    header div p {margin: 0;}
 
     .services {display: grid; gap: 15px; max-width: 600px; margin: 0 auto;}
     .service-btn {
@@ -65,6 +73,11 @@
       padding: 12px 20px; border-radius: 8px; font-weight: bold;
     }
     .order-btn:hover {background: #1ebe5d;}
+    .back-btn {
+      display: inline-block; margin-top: 15px; background: #555; color: #fff;
+      padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold;
+    }
+    .back-btn:hover {background: #333;}
     footer {text-align: center; margin-top: 40px; color: #eee; font-size: 0.9rem;}
   </style>
 </head>
@@ -80,8 +93,12 @@
   <!-- الصفحة الرئيسية -->
   <div id="main-content">
     <header>
-      <h1 id="site-title">خدمات برمجية</h1>
-      <p id="site-subtitle">اختر خدمة لعرض التفاصيل وطلبها</p>
+      <!-- شعار الموقع -->
+      <img src="FullLogo_NoBuffer.png" alt="شعار الموقع">
+      <div>
+        <h1 id="site-title">خدمات برمجية</h1>
+        <p id="site-subtitle">اختر خدمة لعرض التفاصيل وطلبها</p>
+      </div>
     </header>
 
     <main>
@@ -98,6 +115,7 @@
         <p><strong id="details-label-price">السعر:</strong> <span id="service-price"></span></p>
         <p><strong id="details-label-duration">المدة:</strong> <span id="service-duration"></span></p>
         <a id="whatsapp-link" class="order-btn" target="_blank">طلب الخدمة</a>
+        <div class="back-btn" id="back-btn">العودة</div>
       </section>
     </main>
 
@@ -108,6 +126,7 @@
 
 <script>
   let currentLang = "ar";
+  let lastView = "services"; // لتتبع الصفحة الحالية
 
   function setLanguage(lang) {
     currentLang = lang;
@@ -123,6 +142,7 @@
       document.querySelector("#details-label-price").textContent = "Price:";
       document.querySelector("#details-label-duration").textContent = "Duration:";
       document.getElementById('whatsapp-link').textContent = "Order Service";
+      document.getElementById('back-btn').textContent = "Back";
       document.querySelector("footer p").textContent = "All rights reserved © 2025";
 
       const btns = document.querySelectorAll('.service-btn');
@@ -139,6 +159,7 @@
       document.querySelector("#details-label-price").textContent = "السعر:";
       document.querySelector("#details-label-duration").textContent = "المدة:";
       document.getElementById('whatsapp-link').textContent = "طلب الخدمة";
+      document.getElementById('back-btn').textContent = "العودة";
       document.querySelector("footer p").textContent = "جميع الحقوق محفوظة © 2025";
 
       const btns = document.querySelectorAll('.service-btn');
@@ -170,6 +191,7 @@
   const price = document.getElementById('service-price');
   const duration = document.getElementById('service-duration');
   const whatsapp = document.getElementById('whatsapp-link');
+  const backBtn = document.getElementById('back-btn');
 
   const phoneNumber = "971555973375";
 
@@ -197,9 +219,32 @@
       }
 
       detailsSection.style.display = 'block';
+      document.querySelector('.services').style.display = 'none';
+      lastView = "details";
       detailsSection.scrollIntoView({ behavior: 'smooth' });
+      history.pushState({page: 'details'}, '', '#details');
     });
   });
+
+  // زر العودة
+  backBtn.addEventListener('click', () => {
+    detailsSection.style.display = 'none';
+    document.querySelector('.services').style.display = 'grid';
+    lastView = "services";
+    history.pushState({page: 'services'}, '', '#');
+  });
+
+  // التعامل مع زر الرجوع في المتصفح
+  window.addEventListener('popstate', (event) => {
+    if(event.state?.page === 'details') {
+      detailsSection.style.display = 'block';
+      document.querySelector('.services').style.display = 'none';
+    } else {
+      detailsSection.style.display = 'none';
+      document.querySelector('.services').style.display = 'grid';
+    }
+  });
+
 </script>
 
 </body>
