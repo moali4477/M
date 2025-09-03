@@ -47,11 +47,17 @@
     #main-content {display: none; padding: 20px;}
 
     header {
-      display: flex; align-items: center; justify-content: center; gap: 15px; color: white; margin-bottom: 40px;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px; color: white; margin-bottom: 40px;
     }
-    header img {height: 60px;}
-    header div h1 {margin: 0;}
-    header div p {margin: 0;}
+    header img {height: 60px; object-fit: contain;}
+    header div h1 {margin: 0; font-size: 2rem;}
+    header div p {margin: 0; font-size: 1rem; color: #fff;}
+
+    @media (max-width: 500px) {
+      header {flex-direction: column; text-align: center;}
+      header div h1 {font-size: 1.5rem;}
+      header div p {font-size: 0.9rem;}
+    }
 
     .services {display: grid; gap: 15px; max-width: 600px; margin: 0 auto;}
     .service-btn {
@@ -93,7 +99,6 @@
   <!-- الصفحة الرئيسية -->
   <div id="main-content">
     <header>
-      <!-- شعار الموقع -->
       <img src="FullLogo_NoBuffer.png" alt="شعار الموقع">
       <div>
         <h1 id="site-title">خدمات برمجية</h1>
@@ -126,7 +131,7 @@
 
 <script>
   let currentLang = "ar";
-  let lastView = "services"; // لتتبع الصفحة الحالية
+  let lastView = "services";
 
   function setLanguage(lang) {
     currentLang = lang;
@@ -136,7 +141,6 @@
     if(lang === 'en') {
       document.documentElement.lang = 'en';
       document.documentElement.dir = 'ltr';
-
       document.getElementById('site-title').textContent = "Software Services";
       document.getElementById('site-subtitle').textContent = "Choose a service to view details and order";
       document.querySelector("#details-label-price").textContent = "Price:";
@@ -144,7 +148,6 @@
       document.getElementById('whatsapp-link').textContent = "Order Service";
       document.getElementById('back-btn').textContent = "Back";
       document.querySelector("footer p").textContent = "All rights reserved © 2025";
-
       const btns = document.querySelectorAll('.service-btn');
       btns[0].textContent = "Landing Page Design";
       btns[1].textContent = "SEO Optimization";
@@ -153,7 +156,6 @@
     } else {
       document.documentElement.lang = 'ar';
       document.documentElement.dir = 'rtl';
-
       document.getElementById('site-title').textContent = "خدمات برمجية";
       document.getElementById('site-subtitle').textContent = "اختر خدمة لعرض التفاصيل وطلبها";
       document.querySelector("#details-label-price").textContent = "السعر:";
@@ -161,7 +163,6 @@
       document.getElementById('whatsapp-link').textContent = "طلب الخدمة";
       document.getElementById('back-btn').textContent = "العودة";
       document.querySelector("footer p").textContent = "جميع الحقوق محفوظة © 2025";
-
       const btns = document.querySelectorAll('.service-btn');
       btns[0].textContent = "تصميم صفحة هبوط";
       btns[1].textContent = "تحسين وتهيئة مواقع (SEO)";
@@ -173,13 +174,10 @@
   const services = [
     { title_ar: "تصميم صفحة هبوط", description_ar: "إنشاء صفحة واحدة متجاوبة للتسويق لمنتج أو خدمة باستخدام HTML وCSS.", 
       title_en: "Landing Page Design", description_en: "Create a responsive one-page landing site using HTML and CSS.", price: "150", duration_ar: "يومان", duration_en: "2 Days" },
-
     { title_ar: "تحسين وتهيئة مواقع (SEO)", description_ar: "تحسين ظهور موقعك في نتائج البحث من خلال تعديل العناصر الأساسية داخل الصفحة.", 
       title_en: "SEO Optimization", description_en: "Improve your website visibility in search results with on-page SEO optimization.", price: "100", duration_ar: "يوم واحد", duration_en: "1 Day" },
-
     { title_ar: "إنشاء نموذج تواصل", description_ar: "تصميم نموذج تواصل يُرسل البيانات إلى بريد إلكتروني أو عبر واجهة API بسيطة.", 
       title_en: "Contact Form", description_en: "Build a contact form that sends data via email or simple API.", price: "120", duration_ar: "يومان", duration_en: "2 Days" },
-
     { title_ar: "تصميم واجهات HTML + CSS", description_ar: "إنشاء واجهات استخدام جذابة بلغة HTML وCSS بدون برمجة خلفية.", 
       title_en: "HTML + CSS UI Design", description_en: "Create attractive user interfaces using HTML and CSS (without backend).", price: "180", duration_ar: "3 أيام", duration_en: "3 Days" }
   ];
@@ -192,7 +190,7 @@
   const duration = document.getElementById('service-duration');
   const whatsapp = document.getElementById('whatsapp-link');
   const backBtn = document.getElementById('back-btn');
-
+  const servicesSection = document.querySelector('.services');
   const phoneNumber = "971555973375";
 
   buttons.forEach(button => {
@@ -205,7 +203,6 @@
         desc.textContent = service.description_en;
         price.textContent = service.price;
         duration.textContent = service.duration_en;
-
         const message = `Hello, I would like to order the service: ${service.title_en}\n\nDescription: ${service.description_en}\nPrice: ${service.price} SAR\nDuration: ${service.duration_en}`;
         whatsapp.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
       } else {
@@ -213,35 +210,32 @@
         desc.textContent = service.description_ar;
         price.textContent = service.price;
         duration.textContent = service.duration_ar;
-
         const message = `مرحبًا، أرغب في طلب خدمة: ${service.title_ar}\n\nالوصف: ${service.description_ar}\nالسعر: ${service.price} ريال\nالمدة: ${service.duration_ar}`;
         whatsapp.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
       }
 
       detailsSection.style.display = 'block';
-      document.querySelector('.services').style.display = 'none';
+      servicesSection.style.display = 'none';
       lastView = "details";
       detailsSection.scrollIntoView({ behavior: 'smooth' });
       history.pushState({page: 'details'}, '', '#details');
     });
   });
 
-  // زر العودة
   backBtn.addEventListener('click', () => {
     detailsSection.style.display = 'none';
-    document.querySelector('.services').style.display = 'grid';
+    servicesSection.style.display = 'grid';
     lastView = "services";
     history.pushState({page: 'services'}, '', '#');
   });
 
-  // التعامل مع زر الرجوع في المتصفح
   window.addEventListener('popstate', (event) => {
     if(event.state?.page === 'details') {
       detailsSection.style.display = 'block';
-      document.querySelector('.services').style.display = 'none';
+      servicesSection.style.display = 'none';
     } else {
       detailsSection.style.display = 'none';
-      document.querySelector('.services').style.display = 'grid';
+      servicesSection.style.display = 'grid';
     }
   });
 
