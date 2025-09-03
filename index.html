@@ -95,8 +95,8 @@
       <section class="service-details" id="details">
         <h2 id="service-title">اسم الخدمة</h2>
         <p id="service-description">وصف الخدمة</p>
-        <p><strong>السعر:</strong> <span id="service-price"></span> ريال</p>
-        <p><strong>المدة:</strong> <span id="service-duration"></span></p>
+        <p><strong id="details-label-price">السعر:</strong> <span id="service-price"></span></p>
+        <p><strong id="details-label-duration">المدة:</strong> <span id="service-duration"></span></p>
         <a id="whatsapp-link" class="order-btn" target="_blank">طلب الخدمة</a>
       </section>
     </main>
@@ -107,31 +107,60 @@
   </div>
 
 <script>
-  // اختيار اللغة
+  let currentLang = "ar";
+
   function setLanguage(lang) {
+    currentLang = lang;
     document.getElementById('language-selection').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
 
     if(lang === 'en') {
       document.documentElement.lang = 'en';
       document.documentElement.dir = 'ltr';
+
       document.getElementById('site-title').textContent = "Software Services";
       document.getElementById('site-subtitle').textContent = "Choose a service to view details and order";
+      document.querySelector("#details-label-price").textContent = "Price:";
+      document.querySelector("#details-label-duration").textContent = "Duration:";
+      document.getElementById('whatsapp-link').textContent = "Order Service";
+      document.querySelector("footer p").textContent = "All rights reserved © 2025";
 
       const btns = document.querySelectorAll('.service-btn');
       btns[0].textContent = "Landing Page Design";
       btns[1].textContent = "SEO Optimization";
       btns[2].textContent = "Contact Form";
       btns[3].textContent = "HTML + CSS UI Design";
+    } else {
+      document.documentElement.lang = 'ar';
+      document.documentElement.dir = 'rtl';
+
+      document.getElementById('site-title').textContent = "خدمات برمجية";
+      document.getElementById('site-subtitle').textContent = "اختر خدمة لعرض التفاصيل وطلبها";
+      document.querySelector("#details-label-price").textContent = "السعر:";
+      document.querySelector("#details-label-duration").textContent = "المدة:";
+      document.getElementById('whatsapp-link').textContent = "طلب الخدمة";
+      document.querySelector("footer p").textContent = "جميع الحقوق محفوظة © 2025";
+
+      const btns = document.querySelectorAll('.service-btn');
+      btns[0].textContent = "تصميم صفحة هبوط";
+      btns[1].textContent = "تحسين وتهيئة مواقع (SEO)";
+      btns[2].textContent = "إنشاء نموذج تواصل";
+      btns[3].textContent = "تصميم واجهات HTML + CSS";
     }
   }
 
-  // الخدمات
   const services = [
-    { title: "تصميم صفحة هبوط", description: "إنشاء صفحة واحدة متجاوبة للتسويق لمنتج أو خدمة باستخدام HTML وCSS.", price: "150", duration: "يومان" },
-    { title: "تحسين وتهيئة مواقع (SEO)", description: "تحسين ظهور موقعك في نتائج البحث من خلال تعديل العناصر الأساسية داخل الصفحة.", price: "100", duration: "يوم واحد" },
-    { title: "إنشاء نموذج تواصل", description: "تصميم نموذج تواصل يُرسل البيانات إلى بريد إلكتروني أو عبر واجهة API بسيطة.", price: "120", duration: "يومان" },
-    { title: "تصميم واجهات HTML + CSS", description: "إنشاء واجهات استخدام جذابة بلغة HTML وCSS بدون برمجة خلفية.", price: "180", duration: "3 أيام" }
+    { title_ar: "تصميم صفحة هبوط", description_ar: "إنشاء صفحة واحدة متجاوبة للتسويق لمنتج أو خدمة باستخدام HTML وCSS.", 
+      title_en: "Landing Page Design", description_en: "Create a responsive one-page landing site using HTML and CSS.", price: "150", duration_ar: "يومان", duration_en: "2 Days" },
+
+    { title_ar: "تحسين وتهيئة مواقع (SEO)", description_ar: "تحسين ظهور موقعك في نتائج البحث من خلال تعديل العناصر الأساسية داخل الصفحة.", 
+      title_en: "SEO Optimization", description_en: "Improve your website visibility in search results with on-page SEO optimization.", price: "100", duration_ar: "يوم واحد", duration_en: "1 Day" },
+
+    { title_ar: "إنشاء نموذج تواصل", description_ar: "تصميم نموذج تواصل يُرسل البيانات إلى بريد إلكتروني أو عبر واجهة API بسيطة.", 
+      title_en: "Contact Form", description_en: "Build a contact form that sends data via email or simple API.", price: "120", duration_ar: "يومان", duration_en: "2 Days" },
+
+    { title_ar: "تصميم واجهات HTML + CSS", description_ar: "إنشاء واجهات استخدام جذابة بلغة HTML وCSS بدون برمجة خلفية.", 
+      title_en: "HTML + CSS UI Design", description_en: "Create attractive user interfaces using HTML and CSS (without backend).", price: "180", duration_ar: "3 أيام", duration_en: "3 Days" }
   ];
 
   const buttons = document.querySelectorAll('.service-btn');
@@ -149,19 +178,29 @@
       const index = button.dataset.index;
       const service = services[index];
 
-      title.textContent = service.title;
-      desc.textContent = service.description;
-      price.textContent = service.price;
-      duration.textContent = service.duration;
+      if(currentLang === "en") {
+        title.textContent = service.title_en;
+        desc.textContent = service.description_en;
+        price.textContent = service.price;
+        duration.textContent = service.duration_en;
 
-      const message = `مرحبًا، أرغب في طلب خدمة: ${service.title}\n\nالوصف: ${service.description}\nالسعر: ${service.price} ريال\nالمدة: ${service.duration}`;
-      const encodedMessage = encodeURIComponent(message);
-      whatsapp.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        const message = `Hello, I would like to order the service: ${service.title_en}\n\nDescription: ${service.description_en}\nPrice: ${service.price} SAR\nDuration: ${service.duration_en}`;
+        whatsapp.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      } else {
+        title.textContent = service.title_ar;
+        desc.textContent = service.description_ar;
+        price.textContent = service.price;
+        duration.textContent = service.duration_ar;
+
+        const message = `مرحبًا، أرغب في طلب خدمة: ${service.title_ar}\n\nالوصف: ${service.description_ar}\nالسعر: ${service.price} ريال\nالمدة: ${service.duration_ar}`;
+        whatsapp.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      }
 
       detailsSection.style.display = 'block';
       detailsSection.scrollIntoView({ behavior: 'smooth' });
     });
   });
 </script>
+
 </body>
 </html>
